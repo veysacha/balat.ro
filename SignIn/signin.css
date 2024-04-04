@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    width: 30%;
+    height: 30%;
+    margin-left: 35%;
+} 
+
+@media screen and (min-width: 750px) {
+    img {
+        width: 20%;
+        height: 20%;
+        margin-left: 40%;
+    }
+
+    .glass {
+        margin-left: 35%;
+    }
+}
