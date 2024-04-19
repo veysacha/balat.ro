@@ -1,5 +1,8 @@
+<?php
+session_start(); // Démarrer la session au début
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +12,9 @@
     <title>SignIn - Balatro</title>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <img src="../Assets/img/logo_1_white.png" alt="Balatro">
     </div>
-    <!-- glass -->
     <div class="glass">
         <div class="container">
             <div class="row">
@@ -36,47 +37,53 @@
                 </div>
             </div>
         </div>
+    </div>
+    <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (!empty($_POST['pseudo']) && !empty($_POST['password'])) {
+                $servername = "localhost";
+                $dbUsername = "root";
+                $dbPassword = "";
+                $dbname = "balatro";
 
+                try {
+                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $pseudo = htmlspecialchars(strip_tags($_POST['pseudo']));
+                    $stmt = $conn->prepare("SELECT mot_de_passe FROM utilisateurs WHERE pseudo = :pseudo");
+                    $stmt->execute(['pseudo' => $pseudo]);
 
-        <!-- php -->
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Vérifiez si les champs ne sont pas vides
-                if (!empty($_POST['pseudo']) && !empty($_POST['password'])) {
-                    // Effectuer la connexion à la base de données
-                    $servername = "localhost";
-                    $dbUsername = "root";
-                    $dbPassword = ""; // Assurez-vous que c'est le mot de passe de votre base de données, pas celui de l'utilisateur
-                    $dbname = "balatro";
+                    if ($stmt->rowCount() > 0) {
+                        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $hashed_password = $user['mot_de_passe'];
 
-                    try {
-                        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
-                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                        // Sanitisation des entrées
-                        $pseudo = htmlspecialchars(strip_tags($_POST['pseudo']));
-                        // Préparation de la requête pour récupérer le mot de passe hashé de l'utilisateur
-                        $stmt = $conn->prepare("SELECT mot_de_passe FROM utilisateurs WHERE pseudo = :pseudo");
-                        $stmt->execute(['pseudo' => $pseudo]);
-                        if ($stmt->rowCount() > 0) {
-                            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $hashed_password = $user['mot_de_passe'];
-                            if (password_verify($_POST['password'], $hashed_password)) {
-                                echo "<div class='alert alert-success' role='alert'>Connexion réussie</div>";
+                        if (password_verify($_POST['password'], $hashed_password)) {
+                            // Stocker le pseudo de l'utilisateur dans la session
+                            $_SESSION['pseudo'] = $pseudo;
+                            echo "<div class='alert alert-success' role='alert'>Connexion réussie</div>";
+                            // si l'utilisateur à 1 dans le champs admin, il est redirigé vers la page admin.php sinon il est redirigé vers la page forum.php
+                            $stmt = $conn->prepare("SELECT admin FROM utilisateurs WHERE pseudo = :pseudo");
+                            $stmt->execute(['pseudo' => $pseudo]);
+                            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+                            if ($admin['admin'] == 1) {
+                                header("Location: ../Admin/panel_admin.php");
                             } else {
-                                echo "<div class='alert alert-danger' role='alert'>Pseudo ou mot de passe incorrect</div>";
+                                header("Location: ../Forum/forum.php");
                             }
                         } else {
                             echo "<div class='alert alert-danger' role='alert'>Pseudo ou mot de passe incorrect</div>";
                         }
-                    } catch (PDOException $e) {
-                        echo "Erreur : " . $e->getMessage();
+                    } else {
+                        echo "<div class='alert alert-danger' role='alert'>Pseudo ou mot de passe incorrect</div>";
                     }
-                    // Fermeture de la connexion à la base de données
-                    $conn = null;
-                } else {
-                    echo "<div class='alert alert-danger' role='alert'>Veuillez remplir tous les champs</div>";
+                } catch (PDOException $e) {
+                    echo "Erreur : " . $e->getMessage();
                 }
+                $conn = null;
+            } else {
+                echo "<div class='alert alert-danger' role='alert'>Veuillez remplir tous les champs</div>";
             }
-        ?>
+        }
+    ?>
 </body>
 </html>

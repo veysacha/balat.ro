@@ -62,12 +62,23 @@
                         // Hashage du mot de passe
                         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+                        //verifier si l'utilisateur existe déjà
+                        $sql = "SELECT * FROM utilisateurs WHERE email = ?";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute([$email]);
+                        $user = $stmt->fetch();
+                        if ($user) {
+                            echo "Cet utilisateur existe déjà";
+                            exit();
+                        }
+
                         // Préparation de la requête avec les placeholders
                         $sql = "INSERT INTO utilisateurs (pseudo, email, mot_de_passe) VALUES (?, ?, ?)";
                         $stmt = $conn->prepare($sql);
                         // Exécution de la requête avec les valeurs
                         $stmt->execute([$pseudo, $email, $hashed_password]);
                         echo "Nouvelle utilisateur créé avec succès";
+                        header("Location: ../SignIn/signin.php");
                     } catch (PDOException $e) {
                         echo "Erreur: " . $e->getMessage();
                     }
