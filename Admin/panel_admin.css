@@ -17,3 +17,43 @@ img {
 .navbar-nav .nav-item {
     text-align: center;
 }
+
+.container {
+    background: rgba(100, 100, 100, 0.26);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.2px);
+    -webkit-backdrop-filter: blur(8.2px);
+    border: 1px solid rgba(100, 100, 100, 1);
+    padding: 20px;
+}
+
+.titleGeneral {
+    margin-left: 10%;
+}
+
+.messages-container {
+    max-height: 500px; /* Ajustez cette valeur en fonction de la taille réelle de vos messages */
+    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse la hauteur maximale */
+    margin-bottom: 20px; /* Espacement optionnel en bas du conteneur */
+    border: 1px solid #ccc; /* Bordure optionnelle pour le conteneur */
+    padding: 10px; /* Padding intérieur pour le conteneur */
+}
+
+#img_delete {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.titleForum {
+    margin-left: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.bouton {
+    margin-left: 43%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}

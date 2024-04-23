@@ -35,7 +35,7 @@
                             </div>
                             <button type="submit" action="POST" class="btn btn-primary">S'inscrire</button>
                         </form>
-                        <p>Déjà inscris ? <a href="../SignUp/signup.php">Se connecter</a></p>
+                        <p>Déjà inscris ? <a href="../SignIn/signin.php">Se connecter</a></p>
                     </div>
                 </div>
             </div>

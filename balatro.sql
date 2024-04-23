@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 19 avr. 2024 à 12:08
+-- Généré le : ven. 05 avr. 2024 à 11:47
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -81,19 +81,9 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `id` int NOT NULL AUTO_INCREMENT,
   `auteur` varchar(255) NOT NULL,
   `message` text NOT NULL,
-  `heure` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `heure` timestamp NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `messages`
---
-
-INSERT INTO `messages` (`id`, `auteur`, `message`, `heure`) VALUES
-(42, 'admin', 'a la cool\r\n', '2024-04-10 08:47:23'),
-(41, 'admin', 'comment ba ?\r\n', '2024-04-05 13:46:42'),
-(40, 'admin', 'bonjour', '2024-04-05 13:46:35'),
-(33, 'admin', 'bonjour\r\n', '0000-00-00 00:00:00');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -108,17 +98,15 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `email` varchar(255) NOT NULL,
   `mot_de_passe` text NOT NULL,
   `main_pref` varchar(255) NOT NULL,
-  `admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`id`, `pseudo`, `email`, `mot_de_passe`, `main_pref`, `admin`) VALUES
-(2, 'admin', 'admin@admin.com', '$2y$10$Kd.9UXsUQqjo.DFWpVYc4eEF1KSeZp94OtUP8NggP41uWADlr1Bra', '', 1),
-(3, 'user_test', 'user@user.com', '$2y$10$y0XMUp5ZutKCCEFIEkW.9eZXdUlFxu.gMxEEygoXuKaTadJWfkNoe', '', 0);
+INSERT INTO `utilisateurs` (`id`, `pseudo`, `email`, `mot_de_passe`, `main_pref`) VALUES
+(2, 'admin', 'admin@admin.com', '$2y$10$Kd.9UXsUQqjo.DFWpVYc4eEF1KSeZp94OtUP8NggP41uWADlr1Bra', '');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
