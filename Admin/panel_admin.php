@@ -129,7 +129,7 @@
 
     <!-- bouton pour rediriger vers la page de gestion du calculateur -->
     <div class="bouton">
-        <a href="../Calculateur/calculateur.php" class="btn btn-primary">Gestion du calculateur</a>
+        <a href="Calculateur/gestion_calculateur.php" class="btn btn-primary">Gestion du calculateur</a>
     </div>
 
 

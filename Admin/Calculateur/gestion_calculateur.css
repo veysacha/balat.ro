@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.back_button {
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+#logo {
+    height: 100px;
+    width: 100px;
+}
+
+.menu-nav .navbar {
+    background-color: white !important;
+}
+
+.navbar-nav .nav-item {
+    text-align: center;
+}
+
+#back {
+    margin-top: 15px;
+    margin-left: 15px;
+    height: 50px;
+    width: 50px;
+}
+
+.bouton {
+    margin-left: 43%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}

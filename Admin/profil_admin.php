@@ -48,9 +48,40 @@
                 </div>
             </nav>
         </div>
+        <div class="bouton_supp">
+            <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger">Supprimer l'utilisateur</a>
+        </div>
 
-        <div class="photo_profil">
-            
+        <div class="nom_profil">
+            <h1 class="pseudo"><?php echo htmlspecialchars($user['pseudo']); ?></h1>
+        </div>
+        <div class="biographie">
+            <h3 class="titre-bio">Bio</h3>
+            <div class="container"
+                <p class="bio"><?php if ($user['biographie'] == "") { echo "Pas de biographie"; } else { echo htmlspecialchars($user['biographie']); } ?></p>
+            </div>
+        </div>
+        <div class="message_envoye">
+            <!-- si dans la tables messages, il y a un ou des messages ou le nom de l'auteur correspond au nom du profil, on affiche, sinon on affiche "pas de message posté"-->
+            <h3 class="titre-message">Messages postés</h3>
+            <div class="container">
+                <?php
+                    $stmt = $conn->prepare("SELECT id, auteur, message, heure FROM messages WHERE auteur = :auteur ORDER BY heure DESC");
+                    $stmt->execute(['auteur' => $user['pseudo']]);
+                    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    if ($messages) {
+                        foreach ($messages as $message) {
+                            echo '<div class="message">';
+                            echo '<p class="auteur">Auteur: ' . htmlspecialchars($message['auteur']) . '</p>';
+                            echo '<p class="message">' . htmlspecialchars($message['message']) . '</p>';
+                            echo '<p class="heure">Posté le: ' . htmlspecialchars($message['heure']) . '</p>';
+                            echo '______________________________';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p class="no_message">Pas de message posté</p>';
+                    }
+                ?>
         </div>
         
     

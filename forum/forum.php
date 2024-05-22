@@ -32,10 +32,10 @@
                             <a class="nav-link" href="#">Calculateur</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Déconnexion</a>
+                            <a class="nav-link" href="../Deconnexion.php">Déconnexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">à Propos</a>
+                            <a class="nav-link" href="../a_propos/a_propos.php">à Propos</a>
                         </li>
                     </ul>
                 </div>
