@@ -82,18 +82,18 @@ INSERT INTO `cartes` (`id`, `couleur`, `valeurs`, `point`, `chemin_img`) VALUES
 (38, 'coeur', '10', 10, 'img_cartes/10_coeur.png'),
 (39, 'pique', '10', 10, 'img_cartes/10_pique.png'),
 (40, 'trefle', '10', 10, 'img_cartes/10_trefle.png'),
-(42, 'carreaux', 'dame', 10, 'img_cartes/dame_carreaux.png'),
-(43, 'coeur', 'dame', 10, 'img_cartes/dame_coeur.png'),
-(44, 'pique', 'dame', 10, 'img_cartes/dame_pique.png'),
-(45, 'trefle', 'dame', 10, 'img_cartes/dame_trefle.png'),
-(46, 'carreaux', 'roi', 10, 'img_cartes/roi_carreaux.png'),
-(47, 'coeur', 'roi', 10, 'img_cartes/roi_coeur.png'),
-(48, 'pique', 'roi', 10, 'img_cartes/roi_pique.png'),
-(49, 'trefle', 'roi', 10, 'img_cartes/roi_trefle.png'),
-(50, 'carreaux', 'valet', 10, 'img_cartes/valet_carreaux.png'),
-(51, 'coeur', 'valet', 10, 'img_cartes/valet_coeur.png'),
-(52, 'pique', 'valet', 10, 'img_cartes/valet_pique.png'),
-(53, 'trefle', 'valet', 10, 'img_cartes/valet_trefle.png');
+(42, 'carreaux', 'Q', 10, 'img_cartes/dame_carreaux.png'),
+(43, 'coeur', 'Q', 10, 'img_cartes/dame_coeur.png'),
+(44, 'pique', 'Q', 10, 'img_cartes/dame_pique.png'),
+(45, 'trefle', 'Q', 10, 'img_cartes/dame_trefle.png'),
+(46, 'carreaux', 'K', 10, 'img_cartes/roi_carreaux.png'),
+(47, 'coeur', 'K', 10, 'img_cartes/roi_coeur.png'),
+(48, 'pique', 'K', 10, 'img_cartes/roi_pique.png'),
+(49, 'trefle', 'K', 10, 'img_cartes/roi_trefle.png'),
+(50, 'carreaux', 'J', 10, 'img_cartes/valet_carreaux.png'),
+(51, 'coeur', 'J', 10, 'img_cartes/valet_coeur.png'),
+(52, 'pique', 'J', 10, 'img_cartes/valet_pique.png'),
+(53, 'trefle', 'J', 10, 'img_cartes/valet_trefle.png');
 
 -- --------------------------------------------------------
 
@@ -120,13 +120,30 @@ DROP TABLE IF EXISTS `mains_poker`;
 CREATE TABLE IF NOT EXISTS `mains_poker` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) NOT NULL,
-  `niveau` int NOT NULL,
   `jetons` int NOT NULL,
   `multiplicateur` int NOT NULL,
   `ajoutJetonsParNiveau` int NOT NULL,
   `ajoutMultiParNiveau` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `mains_poker`
+--
+
+INSERT INTO `mains_poker` (`id`, `nom`, `jetons`, `multiplicateur`, `ajoutJetonsParNiveau`, `ajoutMultiParNiveau`) VALUES
+(1, 'Flush Five', 160, 16, 50, 3),
+(2, 'Flush House', 140, 14, 40, 4),
+(3, 'Five of a Kind', 120, 12, 35, 3),
+(4, 'Quinte Flush Royale', 100, 8, 40, 4),
+(5, 'Carré', 60, 7, 30, 3),
+(6, 'Main Pleine', 40, 4, 25, 2),
+(7, 'Couleur', 35, 4, 15, 2),
+(8, 'Suite', 30, 4, 30, 3),
+(9, 'Brelan', 30, 3, 20, 2),
+(10, 'Double Paire', 20, 2, 20, 1),
+(11, 'Paire', 10, 2, 15, 1),
+(12, 'Carte Haute', 5, 1, 10, 1);
 
 -- --------------------------------------------------------
 
