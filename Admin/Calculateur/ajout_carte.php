@@ -54,19 +54,35 @@
                     <input type="text" class="form-control" id="couleur" name="couleur" required>
                 </div>
                 <div class="mb-3">
-                    <label for="valeur" class="form-label">Valeur de la carte</label>
-                    <input type="text" class="form-control" id="valeur" name="valeur" required>
+                    <label for="valeurs" class="form-label">Valeur de la carte</label>
+                    <input type="text" class="form-control" id="valeurs" name="valeurs" required>
                 </div>
                 <div class="mb-3">
                     <label for="point" class="form-label">Point données par la carte</label>
                     <input type="number" class="form-control" id="point" name="point" required>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image de la carte</label>
-                    <input type="file" class="form-control" id="image" name="image" required>
+                    <label for="chemin_img" class="form-label">Chemin de l'image</label>
+                    <input type="text" class="form-control" id="chemin_img" name="chemin_img" required>
                     <br />
                 <button type="submit" class="btn btn-primary">Ajouter</button>
             </form>
+        </div>
+
+        <!-- script php pour ajouter le formulaire à la base de données dans la tables "cartes"-->
+        <?php
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $couleur = $_POST['couleur'];
+                $valeur = $_POST['valeurs'];
+                $point = $_POST['point'];
+                $chemin_img = $_POST['chemin_img'];
+
+                $stmt = $conn->prepare("INSERT INTO cartes (couleur, valeurs, point, chemin_img) VALUES (:couleur, :valeurs, :point, :chemin_img)");
+                $stmt->execute(['couleur' => $couleur, 'valeurs' => $valeur, 'point' => $point, 'chemin_img' => $chemin_img]);
+                header('Location: panel_admin.php');
+            }
+
+        ?>
 
 
 </body> 

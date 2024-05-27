@@ -46,5 +46,34 @@
             <a href="ajout_carte.php" class="btn btn-primary">Ajouter une carte</a>
         </div>
 
+        <!-- affiche les différentes cartes dans un tableau grâce au chemin des img depuis la base de données de la tables cartes qu'on a rentrée depuis ajout_carte.php -->
+        <div class="container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Couleur</th>
+                        <th scope="col">Valeur</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $stmt = $conn->prepare("SELECT * FROM cartes");
+                        $stmt->execute();
+                        $cartes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($cartes as $carte) {
+                            echo "<tr>
+                                <td>" . htmlspecialchars($carte['couleur']) . "</td>
+                                <td>" . htmlspecialchars($carte['valeurs']) . "</td>
+                                <td>" . htmlspecialchars($carte['point']) . "</td>
+                                <td><img src='../../" . htmlspecialchars($carte['chemin_img']) . "' alt='carte' width='50' height='70'></td>
+                                <td><a href='delete_carte.php?id=" . $carte['id'] . "' class='btn btn-danger'>Supprimer</a></td>
+                            </tr>";
+                        }
+                    ?>
+                </tbody>
+            </table>
+
 </body>
 </html>
