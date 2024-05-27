@@ -32,7 +32,7 @@
             <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white">
                 <div class="container-fluid">
                     <div class="back_button">
-                        <a href="panel_admin.php"><img id="back" src="../../Assets/img/back.png" alt="Retour"></a>
+                        <a href="../panel_admin.php"><img id="back" src="../../Assets/img/back.png" alt="Retour"></a>
                     </div>
                     <img id="logo" src="../../Assets/img/Logo_2_white.png" alt="logo" width="50" height="50">    
                     <div class="title_admin">
