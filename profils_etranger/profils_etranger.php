@@ -1,26 +1,10 @@
 <?php
     session_start();
-    //verifier si le champs admin de l'utilisateur retourne 0 rediriger vers signin.php sinon continuer
-    $servername = "localhost";
-    $dbUsername = "root";
-    $dbPassword = "";
-    $dbname = "balatro";
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $conn->prepare("SELECT admin FROM utilisateurs WHERE pseudo = :pseudo");
-    $stmt->execute(['pseudo' => $_SESSION['pseudo']]);
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($admin['admin'] == 0) {
+    // si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion
+    if (!isset($_SESSION['pseudo'])) {
         header('Location: ../SignIn/signin.php');
         exit();
     }
-?>
-
-<?php
-    //récupère toute les informations de l'utilisateur avec le pseudo correspondant
-    $stmt = $conn->prepare("SELECT * FROM utilisateurs WHERE pseudo = :pseudo");
-    $stmt->execute(['pseudo' => $_GET['pseudo']]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -30,30 +14,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="profil_admin.css">
-    <title>Profile - <?php echo htmlspecialchars($user['pseudo']); ?></title>
+    <link rel="stylesheet" href="profils_etranger.css">
+    <title>Profil de <?php echo $_SESSION['pseudo']; ?></title>
 </head>
 <body>
+
+    <!-- connexion à la base de données -->
+    <?php
+        $servername = "localhost";
+        $dbUsername = "root";
+        $dbPassword = "";
+        $dbname = "balatro";
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    ?>
 
         <div class="menu-nav">
             <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white">
                 <div class="container-fluid">
                     <div class="back_button">
-                        <a href="panel_admin.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
+                        <a href="../forum/forum.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
                     </div>
-                    <img id="logo" src="../Assets/img/Logo_2_white.png" alt="logo" width="50" height="50">    
-                    <div class="title_admin">
-                        <h3>Panel Admin</h3>
-                    </div>
+                    <img id="logo" src="../Assets/img/Logo_2_white.png" alt="logo" width="50" height="50">
                 </div>
             </nav>
         </div>
-        <!-- bouton delete user -->
-        <div class="bouton">
-            <a href="delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger">Supprimer l'utilisateur</a>
-        </div>
 
-        <!-- pseudo de l'utilisateur -->
+         <!-- pseudo de l'utilisateur -->
         <div class="titre">
             <h1>Profil de <?php echo $_GET['pseudo']; ?></h1>
         </div>
@@ -119,7 +106,6 @@
                 ?>
             </div>
         </div>
-
 
 
 

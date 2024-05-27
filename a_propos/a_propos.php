@@ -1,3 +1,12 @@
+<?php
+    session_start();
+    // si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion
+    if (!isset($_SESSION['pseudo'])) {
+        header('Location: ../SignIn/signin.php');
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +23,7 @@
             <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white">
                 <div class="container-fluid">
                     <div class="back_button">
-                        <a href="forum.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
+                        <a href="../forum/forum.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
                     </div>
                     <img id="logo" src="../Assets/img/Logo_2_white.png" alt="logo" width="50" height="50">
                 </div>

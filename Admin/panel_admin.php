@@ -111,9 +111,10 @@
                 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($users as $user) {
                     echo "<div class='user'>
-                        <a href='profil_admin.php?id=" . $user['id'] . "'><strong>" . htmlspecialchars($user['pseudo']) . "</strong></a> - " .
+                        <strong>" . htmlspecialchars($user['pseudo']) . "</strong></a> - " .
                         htmlspecialchars($user['email']) . " " .
                         "<a href='delete_user.php?id=" . $user['id'] . "'><img id='img_delete' src='../Assets/img/delete-16.png' alt='Supprimer'></a>
+                        <a href='../Admin/profil_admin.php?pseudo=" . $user['pseudo'] . "'>Voir le profil</a>" . "
                         </div>
                         <hr>";
                 }

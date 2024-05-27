@@ -1,5 +1,11 @@
 <?php
     session_start();
+
+    // si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion
+    if (!isset($_SESSION['pseudo'])) {
+        header('Location: ../SignIn/signin.php');
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,10 +32,10 @@
                             <a class="nav-link active" aria-current="page" href="#">Forum</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Mon Profil</a>
+                            <a class="nav-link" href="../profils/profils.php">Mon Profil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Calculateur</a>
+                            <a class="nav-link" href="../Calculateur/calculateur.php">Calculateur</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../Deconnexion.php">Déconnexion</a>
@@ -71,6 +77,8 @@
                     echo "<div class='message'><strong>" . htmlspecialchars($message['auteur']) . "</strong>: " .
                     htmlspecialchars($message['message']) . "<br>" .
                     "<small>Posté le: " . $message['heure'] . "</small></div>";
+                    //ajouter un bouton pour accéder au compte de l'utilisateur grâce à son pseudo
+                    echo "<a href='../profils_etranger/profils_etranger.php?pseudo=" . $message['auteur'] . "'>Voir le profil</a>";
                     }
                 ?>
             </div>

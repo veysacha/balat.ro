@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 27 mai 2024 à 13:23
+-- Généré le : lun. 27 mai 2024 à 14:59
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS `cartes` (
   `couleur` varchar(255) NOT NULL,
   `valeurs` text NOT NULL,
   `point` int NOT NULL,
-  `chemin_img` text CHARACTER SET utf8mb4 NOT NULL,
+  `chemin_img` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `cartes`
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `chemin` varchar(255) NOT NULL,
   `type` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `mains_poker` (
   `ajoutJetonsParNiveau` int NOT NULL,
   `ajoutMultiParNiveau` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `message` text NOT NULL,
   `heure` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `messages`
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `chemin_photo` varchar(255) NOT NULL DEFAULT '../img_profil/img_par_defaut.png',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `utilisateurs`

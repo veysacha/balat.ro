@@ -1,6 +1,5 @@
 <?php
     session_start();
-
     // si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion
     if (!isset($_SESSION['pseudo'])) {
         header('Location: ../SignIn/signin.php');
@@ -22,7 +21,7 @@
         } elseif (count($_SESSION['selected_cards']) < 5) {
             $_SESSION['selected_cards'][] = $_POST['select_card'];
             $_SESSION['error'] = '';
-            header("Location: calculateur.php"); // Redirection pour éviter le clonage par refresh
+            header("Location: modifier_profil.php"); // Redirection pour éviter le clonage par refresh
             exit; // Ne pas oublier d'ajouter exit après header pour stopper le script
         }
     }
@@ -31,11 +30,11 @@
     if (isset($_POST['reset'])) {
         $_SESSION['selected_cards'] = [];
         $_SESSION['error'] = '';
-        header("Location: calculateur.php"); // Redirection pour réinitialiser proprement
+        header("Location: modifier_profil.php"); // Redirection pour réinitialiser proprement
         exit; // Arrêter le script après la redirection
     }
-    
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,47 +42,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="calculateur.css">
-    <title>Forum</title>
+    <link rel="stylesheet" href="profils.css">
+    <title>Profil de <?php echo $_SESSION['pseudo']; ?></title>
 </head>
 <body>
-<div class="menu-nav">
+
+    <!-- connexion à la base de données -->
+    <?php
+        $servername = "localhost";
+        $dbUsername = "root";
+        $dbPassword = "";
+        $dbname = "balatro";
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    ?>
+
+        <div class="menu-nav">
             <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white">
                 <div class="container-fluid">
                     <div class="back_button">
-                        <a href="../forum/forum.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
+                        <a href="profils.php"><img id="back" src="../Assets/img/back.png" alt="Retour"></a>
                     </div>
                     <img id="logo" src="../Assets/img/Logo_2_white.png" alt="logo" width="50" height="50">
                 </div>
             </nav>
         </div>
 
-        <!-- connexion à la base de données -->
-        <?php
-            $servername = "localhost";
-            $dbUsername = "root";
-            $dbPassword = "";
-            $dbname = "balatro";
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbUsername, $dbPassword);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        ?>
 
-        <div class="titre">
-            <h1>Calculateur</h1>
+        <br />
+    <!-- pseudo du compte dans un formulaire pour pouvoir le modifier -->
+    <div class="container">
+    <form action="modifier_profil.php" method="post">
+        <div class="mb-3">
+            <label for="pseudo" class="form-label">Pseudo</label>
+            <input type="text" class="form-control" id="pseudo" name="pseudo" value="<?php echo $_SESSION['pseudo']; ?>" required>
         </div>
-
-        <!-- niveau de la main -->
-        <div class="container">
-            <form action="calculateur.php" method="post">
-                <div class="mb-3">
-                    <label for="niveau" class="form-label">Niveau de la main</label>
-                    <input type="number" class="form-control" id="niveau" name="niveau" min="0" required>
-                </div>
-            </form>
+        <div class="mb-3">
+            <label for="biographie" class="form-label">Biographie</label>
+            <textarea class="form-control" id="biographie" name="biographie" rows="3"></textarea>
         </div>
+        <button type="submit" name="action" value="update_profile" class="btn btn-primary">Modifier</button>
+    </form>
+    </div>
 
-        <!-- crée un tableau à 5 cases pour les cartes séléctionnées, chaque carte est affichée avec son image, si la case 1 est prise on affiche sur la carte 2 et ça jusqu'a 5 cartes grâce au bouton séléctionné de la liste en bas -->
-        <div class="container">
+    <?php 
+        //enregistrement des modifications du profil dans la base de données
+        if (isset($_POST['action']) && $_POST['action'] == 'update_profile') {
+            $stmt = $conn->prepare("UPDATE utilisateurs SET pseudo = :pseudo, biographie = :biographie WHERE pseudo = :old_pseudo");
+            $stmt->execute(['pseudo' => $_POST['pseudo'], 'biographie' => $_POST['biographie'], 'old_pseudo' => $_SESSION['pseudo']]);
+            $_SESSION['pseudo'] = $_POST['pseudo'];
+            header("Location: modifier_profil.php");
+            exit;
+        }
+    ?>
+
+    <!-- tableau des messages de l'utilisateur et un bouton pour les supprimer -->
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Message</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $stmt = $conn->prepare("SELECT id, message, heure FROM messages WHERE auteur = :pseudo ORDER BY heure DESC");
+                    $stmt->execute(['pseudo' => $_SESSION['pseudo']]);
+                    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($messages as $message) {
+                        echo "<tr><td>" . htmlspecialchars($message['message']) . "</td>" .
+                        "<td>" . $message['heure'] . "</td>" .
+                        "<td><a href='delete_message.php?id=" . $message['id'] . "'><img src='../Assets/img/delete-16.png' alt='Supprimer'></a></td></tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+    <br />
+
+    <!-- titre main preferer -->
+    <div class="container">
+        <h3>Main préférée</h3>
+    </div>
+    <br />
+
+    <!-- crée un tableau à 5 cases pour les cartes séléctionnées, chaque carte est affichée avec son image, si la case 1 est prise on affiche sur la carte 2 et ça jusqu'a 5 cartes grâce au bouton séléctionné de la liste en bas -->
+    <div class="container">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -120,8 +168,23 @@
                     header("Refresh:0");
                 }
             ?>
-            <form action="calculateur.php" method="post">
+            <form action="modifier_profil.php" method="post">
                 <button type="submit" name="reset" class="btn btn-primary">Effacer les cartes</button>
+            </form>
+
+            <?php 
+                //enregistrement du chemin des cartes séléctionnées dans la base de données
+                if (isset($_POST['save'])) {
+                    $stmt = $conn->prepare("UPDATE utilisateurs SET main_pref = :main_pref WHERE pseudo = :pseudo");
+                    $stmt->execute(['main_pref' => implode(',', $_SESSION['selected_cards']), 'pseudo' => $_SESSION['pseudo']]);
+                    header("Location: modifier_profil.php");
+                    exit;
+                }
+            ?>
+
+            <!-- bouton pour enregistrer les cartes séléctionnées dans la base de données -->
+            <form action="modifier_profil.php" method="post">
+                <button type="submit" name="save" class="btn btn-success">Enregistrer</button>
             </form>
 
             <!-- message d'erreur -->
@@ -135,11 +198,6 @@
 
             <br />
             <br />
-
-            <!-- bouton vert centrer pour calculer les points -->
-            <div class="container">
-                <button type="submit" class="btn btn-success">Calculer les points</button>
-            </div>
 
 
 
@@ -166,7 +224,7 @@
                             echo "<td>" . $row['point'] . "</td>";
                             echo "<td><img src='../../" . $row['chemin_img'] . "' alt='image' width='50' height='70'></td>";
                             #on envoie l'id de la carte séléctionnée, et on l'envoie en post pour l'afficher au dessus
-                            echo "<td><form action='calculateur.php' method='post'><button type='submit' name='select_card' value='" . $row['id'] . "' class='btn btn-primary'>Sélectionner</button></form></td>";
+                            echo "<td><form action='modifier_profil.php' method='post'><button type='submit' name='select_card' value='" . $row['id'] . "' class='btn btn-primary'>Sélectionner</button></form></td>";
                             echo "</tr>";
                         }
                     ?>
